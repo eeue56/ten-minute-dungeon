@@ -1,7 +1,7 @@
 {
-    "version": "1.0.0",
-    "summary": "helpful summary of your project, less than 80 characters",
-    "repository": "https://github.com/USER/PROJECT.git",
+    "version": "0.1.0",
+    "summary": "",
+    "repository": "https://github.com/eeue56/ten-minute-dungeon.git",
     "license": "BSD3",
     "source-directories": [
         "."
@@ -9,7 +9,8 @@
     "exposed-modules": [],
     "dependencies": {
         "elm-lang/core": "2.1.0 <= v < 3.0.0",
-        "evancz/elm-html": "4.0.1 <= v < 5.0.0"
+        "evancz/elm-html": "4.0.1 <= v < 5.0.0",
+        "evancz/start-app": "1.0.1 <= v < 2.0.0"
     },
     "elm-version": "0.15.1 <= v < 0.16.0"
 }
