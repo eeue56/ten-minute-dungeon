@@ -23,18 +23,22 @@ move y maxY = if
     | y > maxY -> maxY
     | otherwise -> y
 
+
 update : Input -> Board -> Board
 update action board = 
   case action.direction of 
     None -> board
-    Up ->  Focus.update (player => pos => y) (\y -> move (y + 1) board.maxY) board
-    Down -> Focus.update (player => pos => y) (\y -> move (y - 1) board.maxY) board
-    Right ->  Focus.update (player => pos => x) (\x -> move (x + 1) board.maxX) board
-    Left -> Focus.update (player => pos => x) (\x -> move (x - 1) board.maxX) board
+    Up ->  Focus.update playerY (\y -> move (y + 1) board.maxY) board
+    Down -> Focus.update playerY (\y -> move (y - 1) board.maxY) board
+    Right ->  Focus.update playerX (\x -> move (x + 1) board.maxX) board
+    Left -> Focus.update playerX (\x -> move (x - 1) board.maxX) board
     otherwise -> board
 
 pieceSize : Focus { record | pieceSize : a} a
 pieceSize = create .pieceSize (\f r -> { r | pieceSize <- f r.pieceSize })
+
+playerX = player => pos => x
+playerY = player => pos => y
 
 player = create .player (\f r -> { r | player <- f r.player })
 img = create .img (\f r -> { r | img <- f r.img })
