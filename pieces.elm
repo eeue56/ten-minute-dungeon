@@ -7,6 +7,8 @@ type WorldObject =
     Player { img : String, pos: Position}
 
 makePiece : Int -> Int -> WorldObject
-makePiece x y = Piece {img = "graphics/brick.jpg", pos = {x = x, y = y}}
-
-
+makePiece x y =
+    let 
+        img = if (x + y) % 2 == 0 then "block1.png" else "block2.png"
+    in 
+        Piece {img = "graphics/" ++ img, pos = {x = x, y = y}}

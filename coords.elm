@@ -1,5 +1,6 @@
 module Coords (Position, genBoard) where
-    
+
+
 type alias Position = {x: Int, y: Int}
 
 genBoard : Int -> Int -> List (Int, Int)
