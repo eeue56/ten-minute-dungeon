@@ -18,7 +18,7 @@ type alias Board = {
     maxY: Int
 }
 
-move y maxY = if 
+move maxY y = if 
     | y < 0 -> 0
     | y > maxY -> maxY
     | otherwise -> y
@@ -26,13 +26,17 @@ move y maxY = if
 
 update : Input -> Board -> Board
 update action board = 
-  case action.direction of 
-    None -> board
-    Up ->  Focus.update playerY (\y -> move (y + 1) board.maxY) board
-    Down -> Focus.update playerY (\y -> move (y - 1) board.maxY) board
-    Right ->  Focus.update playerX (\x -> move (x + 1) board.maxX) board
-    Left -> Focus.update playerX (\x -> move (x - 1) board.maxX) board
-    otherwise -> board
+  let 
+    bindX = move board.maxX 
+    bindY = move board.maxY
+  in
+    case action.direction of 
+      None -> board
+      Up ->  Focus.update playerY (\y -> bindY <| y + 1) board
+      Down -> Focus.update playerY (\y -> bindY <| y - 1) board
+      Right ->  Focus.update playerX (\x -> bindX <| x + 1) board
+      Left -> Focus.update playerX (\x -> bindX <| x - 1) board
+      otherwise -> board
 
 pieceSize : Focus { record | pieceSize : a} a
 pieceSize = create .pieceSize (\f r -> { r | pieceSize <- f r.pieceSize })
