@@ -12,18 +12,25 @@ type alias Board = {
     player: Player,
     pieces: List (Piece), 
     width: Float, 
-    height: Float ,
-    pieceSize: Float
+    height: Float,
+    pieceSize: Float,
+    maxX: Int,
+    maxY: Int
 }
+
+move y maxY = if 
+    | y < 0 -> 0
+    | y > maxY -> maxY
+    | otherwise -> y
 
 update : Input -> Board -> Board
 update action board = 
   case action.direction of 
     None -> board
-    Up ->  Focus.update (player => pos => y) (\y -> y + 1) board
-    Down -> Focus.update (player => pos => y) (\y -> y - 1) board
-    Right ->  Focus.update (player => pos => x) (\x -> x + 1) board
-    Left -> Focus.update (player => pos => x) (\x -> x - 1) board
+    Up ->  Focus.update (player => pos => y) (\y -> move (y + 1) board.maxY) board
+    Down -> Focus.update (player => pos => y) (\y -> move (y - 1) board.maxY) board
+    Right ->  Focus.update (player => pos => x) (\x -> move (x + 1) board.maxX) board
+    Left -> Focus.update (player => pos => x) (\x -> move (x - 1) board.maxX) board
     otherwise -> board
 
 pieceSize : Focus { record | pieceSize : a} a

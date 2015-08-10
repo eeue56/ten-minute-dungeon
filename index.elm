@@ -33,7 +33,9 @@ board = {
     pieces = makePieces 8 8,
     width = 500,
     height = 500,
-    pieceSize = 50
+    pieceSize = 50,
+    maxX = 8,
+    maxY = 8
   }
 
 
@@ -55,6 +57,3 @@ drawBoard board =
 
 drawBoardCoords address board = 
   div [] <| List.map (\piece -> button [] [Html.text <| toString [piece.pos.x, piece.pos.y]]) <| board.pieces
-
-updateBoard : Board -> Bool -> Board
-updateBoard board isDown = if isDown then { board - player | player = makePlayer 3 3 } else board
