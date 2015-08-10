@@ -1,12 +1,12 @@
 module Coords (Position, genBoard) where
     
-type alias Position = {x: Float, y: Float}
+type alias Position = {x: Int, y: Int}
 
-genBoard x y = if
-  | x < 0 || y < 0 -> []
-  | x == 0 -> List.map (\y -> (0, y)) [1..y]
-  | y == 0 -> List.map (\x -> (x, 0)) [1..x]
-  | otherwise -> 
-    (genBoard x 0) ++ 
-      (genBoard 0 y) ++ 
-        List.map2 (\x y -> (x, y)) [0..x] [0..y]
+genBoard : Int -> Int -> List (Int, Int)
+genBoard m n =
+    let 
+        tuples x y = (x, y)
+        columns : Int -> Int -> List (Int, Int)
+        columns n x = List.map2 tuples [0..(n-1)] (List.repeat n x)
+    in 
+        List.concat <| List.map (columns n) [0..(m-1)]

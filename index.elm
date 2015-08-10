@@ -18,7 +18,7 @@ main =
 
 board : Board
 board = { 
-    pieces = makePieces 5 5,
+    pieces = makePieces 5 8,
     width = 500,
     height = 500,
     pieceSize = 50
@@ -27,10 +27,10 @@ board = {
 
 
 
-makePieces : Float -> Float -> List WorldObject
+makePieces : Int -> Int -> List WorldObject
 makePieces x y = if
   | x < 0 || y < 0 -> []
-  | otherwise -> List.map (\(x, y) -> makePiece x y) <| genBoard x y
+  | otherwise -> List.map (\(x, y) -> makePiece (x) (y) ) <| genBoard x y
 
 genRect = drawWorldObject
 
