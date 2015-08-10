@@ -1,8 +1,9 @@
 module Board (Board) where
-import Pieces exposing (Piece)
+import Pieces exposing (WorldObject)
 
 type alias Board = { 
-    pieces: List (Piece), 
+    pieces: List (WorldObject), 
     width: Float, 
-    height: Float 
+    height: Float ,
+    pieceSize: Float
 }

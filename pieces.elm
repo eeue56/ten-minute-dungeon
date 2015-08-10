@@ -1,7 +1,12 @@
-module Pieces (Piece, makePiece) where
+module Pieces (WorldObject(Piece, Player), makePiece) where
 import Coords exposing (Position)
 
-type alias Piece = { img : String, pos: Position}
 
-makePiece : Float -> Float -> Piece
-makePiece x y = Piece "graphics/brick.jpg" {x = x, y = y}
+type WorldObject = 
+    Piece { img : String, pos: Position} | 
+    Player { img : String, pos: Position}
+
+makePiece : Float -> Float -> WorldObject
+makePiece x y = Piece {img = "graphics/brick.jpg", pos = {x = x, y = y}}
+
+

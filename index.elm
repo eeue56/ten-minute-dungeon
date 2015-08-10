@@ -10,6 +10,7 @@ import Graphics.Element exposing (..)
 import Pieces exposing (..)
 import Coords exposing (..)
 import Board exposing (..)
+import Drawing exposing (..)
 
 main =
   StartApp.start { model = board, view = drawBoard, update = (\x -> x) }
@@ -19,26 +20,19 @@ board : Board
 board = { 
     pieces = makePieces 5 5,
     width = 500,
-    height = 500
+    height = 500,
+    pieceSize = 50
   }
 
-pieceSize = 50
 
-makePieces : Float -> Float -> List Piece
+
+
+makePieces : Float -> Float -> List WorldObject
 makePieces x y = if
   | x < 0 || y < 0 -> []
   | otherwise -> List.map (\(x, y) -> makePiece x y) <| genBoard x y
 
-
-
-genRect board piece =
-  let 
-    startWidth = board.width / 2 - pieceSize
-    startHeight = board.height / 2 - pieceSize
-  in 
-    image pieceSize pieceSize piece.img
-      |> toForm
-      |> move (toFloat pieceSize * piece.pos.x - startWidth, toFloat pieceSize * piece.pos.y - startHeight)
+genRect = drawWorldObject
 
 
 drawBoard address board =
