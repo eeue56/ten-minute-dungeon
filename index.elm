@@ -9,7 +9,7 @@ import Graphics.Element exposing (..)
 
 
 main =
-  StartApp.start { model = board, view = drawBoard', update = update }
+  StartApp.start { model = board, view = drawBoard, update = (\x -> x) }
 
 type alias Position = {x: Float, y: Float}
 type alias Piece = { img : String, pos: Position}
@@ -29,10 +29,13 @@ genBoard x y = if
   | x < 0 || y < 0 -> []
   | x == 0 -> List.map (\y -> (0, y)) [1..y]
   | y == 0 -> List.map (\x -> (x, 0)) [1..x]
-  | otherwise -> (genBoard x 0) ++ (genBoard 0 y) ++ List.map2 (\x y -> (x, y)) [0..x] [0..y] 
+  | otherwise -> 
+    (genBoard x 0) ++ 
+      (genBoard 0 y) ++ 
+        List.map2 (\x y -> (x, y)) [0..x] [0..y]
 
 makePiece : Float -> Float -> Piece
-makePiece x y = Piece "" {x = x, y = y}
+makePiece x y = Piece "graphics/brick.jpg" {x = x, y = y}
 
 makePieces : Float -> Float -> List Piece
 makePieces x y = if
@@ -40,7 +43,7 @@ makePieces x y = if
   | otherwise -> List.map (\(x, y) -> makePiece x y) <| genBoard x y
 
 
-drawBoard address board = 
+drawBoardCoords address board = 
   div [] <| List.map (\piece -> button [] [Html.text <| toString [piece.pos.x, piece.pos.y]]) <| board.pieces
 
 genRect board piece =
@@ -48,15 +51,11 @@ genRect board piece =
     startWidth = board.width / 2 - pieceSize
     startHeight = board.height / 2 - pieceSize
   in 
-    rect pieceSize pieceSize
-      |> filled (rgba 111 111 111 0.6)
+    image pieceSize pieceSize piece.img
+      |> toForm
       |> move (toFloat pieceSize * piece.pos.x - startWidth, toFloat pieceSize * piece.pos.y - startHeight)
 
 
-drawBoard' address board =
+drawBoard address board =
   Html.fromElement <| 
     collage (round board.width) (round board.height) <| List.map (genRect board) board.pieces
-
-type Action = Increment | Decrement | Reset
-
-update action model = model
