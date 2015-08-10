@@ -49,11 +49,11 @@ boardCollage board = collage (round board.width) (round board.height)
 
 
 drawBoard board =
-  div []
-  [
-    Html.fromElement <| 
-      layers [(boardCollage board <| List.map (drawPiece board) board.pieces), (boardCollage board <| [drawPlayer board board.player])]
-    ]
+  Html.fromElement <| 
+    layers 
+      [(boardCollage board <| List.map (drawPiece board) board.pieces), 
+       (boardCollage board <| [drawPlayer board board.player])]
+
 
 drawBoardCoords address board = 
   div [] <| List.map (\piece -> button [] [Html.text <| toString [piece.pos.x, piece.pos.y]]) <| board.pieces
