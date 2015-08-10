@@ -1,11 +1,4 @@
-import Html exposing (div, button, text)
 import String exposing (dropLeft)
-
-import Color exposing (..)
-import Graphics.Collage exposing (..)
-import Graphics.Element exposing (..)
-
-import Html.Events exposing (onKeyDown, onClick, onKeyPress)
 
 import Pieces exposing (..)
 import Coords exposing (..)
@@ -15,17 +8,6 @@ import Signal exposing (..)
 import Input exposing (..)
 
 input = Input <~ playerDirection
-
-
-model =
-  Signal.foldp
-    update
-    board
-    input
-
-main = drawBoard <~ model
-
-
 
 board : Board
 board = {
@@ -38,22 +20,10 @@ board = {
     maxY = 8
   }
 
+model =
+  Signal.foldp
+    update
+    board
+    input
 
-
-makePieces : Int -> Int -> List Piece
-makePieces x y = if
-  | x < 0 || y < 0 -> []
-  | otherwise -> List.map (\(x, y) -> makePiece (x) (y) ) <| genBoard x y
-
-boardCollage board = collage (round board.width) (round board.height)
-
-
-drawBoard board =
-  Html.fromElement <| 
-    layers 
-      [(boardCollage board <| List.map (drawPiece board) board.pieces), 
-       (boardCollage board <| [drawPlayer board board.player])]
-
-
-drawBoardCoords address board = 
-  div [] <| List.map (\piece -> button [] [Html.text <| toString [piece.pos.x, piece.pos.y]]) <| board.pieces
+main = drawBoard <~ model

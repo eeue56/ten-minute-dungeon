@@ -1,6 +1,9 @@
-module Drawing (drawPlayer, drawPiece) where
-import Graphics.Collage exposing (toForm, move, Form)
-import Graphics.Element exposing (image)
+module Drawing (drawPlayer, drawPiece, drawBoard) where
+
+import Html exposing (div, button, text)
+
+import Graphics.Collage exposing (toForm, move, Form, collage)
+import Graphics.Element exposing (image, layers)
 
 import Board exposing (Board)
 import Pieces exposing (..)
@@ -30,3 +33,15 @@ drawPiece board piece =
     image (round pieceSize) (round pieceSize) piece.img
             |> toForm
             |> move (x, y)
+
+drawBoard board =
+  Html.fromElement <| 
+    layers 
+      [(boardCollage board <| List.map (drawPiece board) board.pieces), 
+       (boardCollage board <| [drawPlayer board board.player])]
+
+drawBoardCoords address board = 
+  div [] <| List.map (\piece -> button [] [Html.text <| toString [piece.pos.x, piece.pos.y]]) <| board.pieces
+
+
+boardCollage board = collage (round board.width) (round board.height)
