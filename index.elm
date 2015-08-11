@@ -1,5 +1,3 @@
-import String exposing (dropLeft)
-
 import Pieces exposing (..)
 import Coords exposing (..)
 import Board exposing (..)
@@ -19,6 +17,8 @@ board = {
     maxX = 8,
     maxY = 8
   }
+
+
 
 model =
   Signal.foldp

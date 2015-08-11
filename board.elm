@@ -1,10 +1,11 @@
 module Board (Board, update) where
 
+import Focus exposing ((=>), create, Focus)
+
 import Pieces exposing (Player, Piece, makePlayer)
 import Input exposing (..)
 import Coords exposing (..)
 
-import Focus exposing ((=>), create, Focus)
 
 
 
