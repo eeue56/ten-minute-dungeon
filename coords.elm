@@ -11,3 +11,4 @@ genBoard m n =
         columns n x = List.map2 tuples [0..(n-1)] (List.repeat n x)
     in 
         List.concat <| List.map (columns n) [0..(m-1)]
+
