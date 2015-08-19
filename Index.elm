@@ -10,7 +10,8 @@ input = Input <~ playerDirection
 board : Board
 board = {
     player = makePlayer 5 5,
-    pieces = makePieces 8 8,
+    --pieces = makePieces 8 8,
+    pieces = makeMaze 8 8,
     width = 500,
     height = 500,
     pieceSize = 50,
