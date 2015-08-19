@@ -58,7 +58,9 @@ makeMaze height width =
       in
         if Set.isEmpty shared
           then Nothing 
-          else Just <| Set.insert (justHead <| Set.toList shared) <| Set.union s1 s2
+          else case List.head <| Set.toList shared of
+            Just x -> Just <| Set.insert x <| Set.union s1 s2
+            Nothing -> Nothing
 
 
     perimeter : Set.Set Cell -> Set.Set Cell
@@ -84,7 +86,7 @@ makeMaze height width =
         start = List.foldl Set.union Set.empty [neighbors (2,2), allNeighbors (5,5), diagonals (6,3)]
         evolveN n = List.foldl (>>) identity (List.repeat n evolve)
       in
-        Set.toList <| inverse <| justHead <| connect <| sets <| evolveN 15 start
+        Set.toList <| inverse <| justHead <| connect <| sets <| evolveN 10 start
             
     allNeighbors : Cell -> Set.Set Cell
     allNeighbors cell = Set.union (neighbors cell) (diagonals cell)
