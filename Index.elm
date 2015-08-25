@@ -11,17 +11,20 @@ input = Input <~ playerDirection
 
 
 board : Board
-board = let player = makePlayer 5 5 in {
-                                        player = player,
-                                        --pieces = makePieces 8 8,
-                                        pieces = makeMaze 8 8,
-                                        trail = makeTrail (player.pos.x,  player.pos.y) (7,7),
-                                        width = 500,
-                                        height = 500,
-                                        pieceSize = 50,
-                                        maxX = 8,
-                                        maxY = 8
-                                      }
+board = 
+  let 
+    player = makePlayer 5 5 
+  in 
+  {
+    player = player,
+    pieces = makeMaze 8 8,
+    trail = makeTrail (player.pos.x,  player.pos.y) (7,7),
+    width = 500,
+    height = 500,
+    pieceSize = 50,
+    maxX = 8,
+    maxY = 8
+  }
 
 
 
