@@ -2,8 +2,9 @@ module Drawing (drawPlayer, drawPiece, drawBoard) where
 
 import Html exposing (div, button, text)
 
-import Graphics.Collage exposing (toForm, move, Form, collage)
+import Graphics.Collage exposing (toForm, move, Form, rect, filled, collage)
 import Graphics.Element exposing (image, layers, show)
+import Color exposing (red, black, toRgb, rgb)
 
 import Board exposing (Board)
 import Pieces exposing (..)
@@ -13,10 +14,10 @@ drawPlayer : Board -> Player -> Form
 drawPlayer board player = 
   let 
     pieceSize = board.pieceSize
-    startWidth = board.width / 2 - pieceSize
-    startHeight = board.height / 2 - pieceSize
-    x = pieceSize * (toFloat player.pos.x) - startWidth
-    y = pieceSize * (toFloat player.pos.y) - startHeight
+    originX = pieceSize/2-(board.width / 2) 
+    originY = pieceSize/2-(board.height / 2)
+    x = originX + pieceSize * (toFloat player.pos.x)
+    y = originY + pieceSize * (toFloat player.pos.y)
   in
   image (round pieceSize) (round pieceSize) player.img
     |> toForm
@@ -25,21 +26,23 @@ drawPlayer board player =
 drawPiece board piece = 
   let 
     pieceSize = board.pieceSize
-    startWidth = board.width / 2 - pieceSize
-    startHeight = board.height / 2 - pieceSize
-    x = pieceSize * (toFloat piece.pos.x) - startWidth
-    y = pieceSize * (toFloat piece.pos.y) - startHeight
+    originX = pieceSize/2-(board.width / 2) 
+    originY = pieceSize/2-(board.height / 2)
+    x = originX + pieceSize * (toFloat piece.pos.x)
+    y = originY + pieceSize * (toFloat piece.pos.y)
   in
-  image (round pieceSize) (round pieceSize) piece.img
-    |> toForm
-    |> move (x, y)
+    image (round pieceSize) (round pieceSize) piece.img
+      |> toForm
+      |> move (x, y)
 
 drawBoard board =
   div [] 
   [
     Html.fromElement <| 
       layers 
-        [(boardCollage board <| List.map (drawPiece board) board.pieces),
+        [
+         (boardCollage board <| [rect board.width board.height |> filled black]),
+         (boardCollage board <| List.map (drawPiece board) board.pieces),
          (boardCollage board <| List.map (drawPiece board) board.trail),
          (boardCollage board <| [drawPlayer board board.player])]
     , Html.fromElement <| show board

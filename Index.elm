@@ -6,24 +6,28 @@ import Signal exposing (..)
 import Input exposing (..)
 import Util exposing (..)
 
-input = Input <~ playerDirection
-
-
+input = Input <~ inputSignal
 
 board : Board
 board = 
   let 
-    player = makePlayer 5 5 
+    player = makePlayer 5 5
+    pieceSize = 50
+    cols = 8
+    rows = 8
+    pieces = makeMaze cols rows
+    width = cols * pieceSize
+    height = rows * pieceSize
   in 
   {
     player = player,
-    pieces = makeMaze 8 8,
+    pieces = pieces,
     trail = makeTrail (player.pos.x,  player.pos.y) (7,7),
-    width = 500,
-    height = 500,
-    pieceSize = 50,
-    maxX = 8,
-    maxY = 8
+    width = width,
+    height = height,
+    pieceSize = pieceSize,
+    cols = cols,
+    rows = rows
   }
 
 

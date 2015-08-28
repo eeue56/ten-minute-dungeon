@@ -16,8 +16,8 @@ type alias Board = {
     width: Float, 
     height: Float,
     pieceSize: Float,
-    maxX: Int,
-    maxY: Int
+    rows: Int,
+    cols: Int
 }
 
 move maxY y = if 
@@ -28,18 +28,30 @@ move maxY y = if
 
 updateTrailStart : Board -> Board
 updateTrailStart board = { board | trail <- makeTrail (board.player.pos.x,  board.player.pos.y) (7,7) }
-                                       
-
+             
+updateTrailEnd : Int -> Int -> Board -> Board
+updateTrailEnd x y board =
+  let
+    toSquare : Int -> Int -> (Int, Int)
+    toSquare x y = 
+      (
+        x // (round board.pieceSize),
+        board.rows - 1 - (y // (round board.pieceSize))
+      )
+  in
+    { board | trail <- makeTrail (board.player.pos.x,  board.player.pos.y) <| toSquare x y }
+                    
 
 update : Input -> Board -> Board
 update action board = 
   let 
-    bindX = move board.maxX 
-    bindY = move board.maxY
+    bindX = move (board.cols+1)
+    bindY = move (board.rows+1)
     --updatePos = updateTrailStart << Focus.update
   in
-    case action.direction of 
+    case action.action of 
       None -> board
+      MouseClick x y -> updateTrailEnd x y board
       Up ->  updateTrailStart <| Focus.update playerY (\y -> bindY <| y + 1) board
       Down -> updateTrailStart <| Focus.update playerY (\y -> bindY <| y - 1) board
       Right ->  updateTrailStart <| Focus.update playerX (\x -> bindX <| x + 1) board
