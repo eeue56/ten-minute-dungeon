@@ -13,6 +13,7 @@ type alias Board = {
     player: Player,
     pieces: List (Piece), 
     trail: List Piece,
+    trailEnd: (Int, Int),
     width: Float, 
     height: Float,
     pieceSize: Float,
@@ -27,7 +28,7 @@ move maxY y = if
 
 
 updateTrailStart : Board -> Board
-updateTrailStart board = { board | trail <- makeTrail (board.player.pos.x,  board.player.pos.y) (7,7) }
+updateTrailStart board = { board | trail <- makeTrail (board.player.pos.x,  board.player.pos.y) board.trailEnd }
              
 updateTrailEnd : Int -> Int -> Board -> Board
 updateTrailEnd x y board =
@@ -38,8 +39,10 @@ updateTrailEnd x y board =
         x // (round board.pieceSize),
         board.rows - 1 - (y // (round board.pieceSize))
       )
+    trailEnd = toSquare x y
+    board' = { board | trail <- makeTrail (board.player.pos.x,  board.player.pos.y) <| trailEnd }
   in
-    { board | trail <- makeTrail (board.player.pos.x,  board.player.pos.y) <| toSquare x y }
+    {board' | trailEnd <- trailEnd}
                     
 
 update : Input -> Board -> Board

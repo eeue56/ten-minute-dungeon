@@ -12,6 +12,7 @@ board : Board
 board = 
   let 
     player = makePlayer 5 5
+    trailEnd = (player.pos.x, player.pos.y)
     pieceSize = 50
     cols = 8
     rows = 8
@@ -22,7 +23,8 @@ board =
   {
     player = player,
     pieces = pieces,
-    trail = makeTrail (player.pos.x,  player.pos.y) (7,7),
+    trail = makeTrail (player.pos.x,  player.pos.y) trailEnd,
+    trailEnd = trailEnd,
     width = width,
     height = height,
     pieceSize = pieceSize,
