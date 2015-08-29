@@ -12,6 +12,8 @@ justHead x = case List.head x of Just v -> v
 rectangle : Int -> Int -> Set.Set Cell
 rectangle n m = Set.fromList <| List.concat <| List.map (\x-> List.map2 (,) [0..(n-1)] <| List.repeat n x) [0..(m-1)]
 
+
+
 dimUtils height width = 
   let
     allPairs = rectangle height width
