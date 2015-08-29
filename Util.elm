@@ -26,7 +26,22 @@ dimUtils height width =
     inverse x = Set.diff allPairs x
 
     allNeighbors : Cell -> Set.Set Cell
-    allNeighbors cell = Set.union (neighbors cell) (diagonals cell)
+    allNeighbors cell = fastAllNeighbors cell -- Set.union (neighbors cell) (diagonals cell)
+
+    fastAllNeighbors : Cell -> Set.Set Cell
+    fastAllNeighbors (i, j) = 
+      Set.fromList
+        <| List.filter inBounds
+        <|
+          [(-1 + i, j), 
+           (1 + i, j),
+           (i, j - 1), 
+           (i, j + 1),
+           -- diagonals
+           (i - 1, j - 1), 
+           (i + 1, j - 1), 
+           (i - 1, j + 1), 
+           (i + 1, j + 1)]
 
     neighbors : Cell -> Set.Set Cell
     neighbors (i,j) = 
