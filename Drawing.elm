@@ -45,7 +45,6 @@ drawBoard board =
          (boardCollage board <| List.map (drawPiece board) board.pieces),
          (boardCollage board <| List.map (drawPiece board) board.trail),
          (boardCollage board <| [drawPlayer board board.player])]
-    , Html.fromElement <| show board
   ]
 
 drawBoardCoords address board = 
