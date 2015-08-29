@@ -10,7 +10,7 @@ type alias Piece = { img : String, pos: Position}
 type alias Player = { img : String, pos: Position}
 type alias Cell = (Int, Int)
 
-utils = Util.dimUtils 8 8
+utils = Util.dimUtils 25 25
 
 makePiece : Int -> Int -> Piece
 makePiece x y =
