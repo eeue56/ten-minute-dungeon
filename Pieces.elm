@@ -36,11 +36,9 @@ makeTrail s e =
     bfs : Cell -> Cell -> Set.Set Cell -> Maybe (List Cell)
     bfs start end board = 
       let
-        --getPath : Cell -> Dict.Dict Cell Cell -> List Cell
         getPath node visited = if
           | node == start -> [start]
           | otherwise -> case Dict.get node visited of Just node' -> getPath node' visited ++ [node]
-       -- bfsHelper : Dict.Dict Cell Cell -> List (Cell, Cell) -> Maybe (List Cell)
         bfsHelper visited xs = case xs of
           [] -> Nothing
           ((from, to)::qs) -> if
