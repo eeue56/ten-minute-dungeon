@@ -109,10 +109,21 @@ dimUtils height width =
         Set.map fst <| Set.union 
                         (Set.filter (\(_,n) -> n == 3) allPairsNeighbors)
                         boardNeighbors
+
+    fastEvolve : Set.Set Cell -> Set.Set Cell
+    fastEvolve board = 
+      let
+        numNeighbors cell = List.length <| Set.toList <| Set.intersect (allNeighbors cell) board
+        allPairsNeighbors = 
+          Set.filter (\(cell, n) -> (n == 3) || (Set.member cell board && (n < 5 && n >= 1)) ) 
+            <| Set.map (\cell -> (cell, numNeighbors cell)) allPairs
+      in 
+        Set.map fst <| allPairsNeighbors
+
     maze = 
       let
         start = List.foldl Set.union Set.empty [neighbors (2,2), allNeighbors (5,5), diagonals (6,3)]
-        evolveN n = List.foldl (>>) identity (List.repeat n evolve)
+        evolveN n = List.foldl (>>) identity (List.repeat n fastEvolve)
       in
         inverse <| justHead <| connect <| sets <| evolveN 25 start
 
