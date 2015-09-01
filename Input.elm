@@ -1,4 +1,4 @@
-module Input (Action(MouseClick, Up, Down, Left, Right, None), Input, inputSignal) where
+module Input (Action(..), Input, inputSignal) where
 
 import Keyboard
 import Mouse

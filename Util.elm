@@ -130,12 +130,14 @@ dimUtils height width =
         Set.map fst <| Set.union 
                         (Set.filter (\(_,n) -> n == 3) allPairsNeighbors)
                         boardNeighbors
+
     maze = 
       let
         start = List.foldl Set.union Set.empty [neighbors (2,2), allNeighbors (5,5), diagonals (9,3), neighbors (7,13), allNeighbors (3,13), diagonals (10,1)]
         evolveN n = List.foldl (>>) identity (List.repeat n evolve)
       in
         inverse <| justSetHead <| connectWithPerimeter <| mapPerimeter <| sets <| evolveN 15 start
+        
     mapPerimeter : List (Set.Set Cell) -> List (Set.Set Cell, Set.Set Cell)
     mapPerimeter xs = List.map (\x -> (x, perimeter x)) xs
 
