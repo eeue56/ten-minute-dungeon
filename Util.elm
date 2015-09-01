@@ -1,7 +1,7 @@
 module Util (dimUtils, justHead, rectangle) where
 
 import Set as Set
-import Dict as Map
+import Dict as Dict
 
 type alias Cell = (Int, Int)
 
@@ -9,14 +9,18 @@ type alias Cell = (Int, Int)
 justHead : List a -> a
 justHead x = case List.head x of Just v -> v
 
+justSetHead : List (a,a) -> a
+justSetHead x = case List.head x of Just (s,p) -> s
+
 rectangle : Int -> Int -> Set.Set Cell
 rectangle n m = Set.fromList <| List.concat <| List.map (\x-> List.map2 (,) [0..(n-1)] <| List.repeat n x) [0..(m-1)]
-
-
 
 dimUtils height width = 
   let
     allPairs = rectangle height width
+
+    precalculatedAllNeighbors : Dict.Dict Cell (List Cell)
+    precalculatedAllNeighbors = Set.foldl (\cell acc -> Dict.insert cell (allNeighborsList cell) acc) Dict.empty allPairs
 
     inBounds : Cell -> Bool
     inBounds (i',j') = (i' < height) && (j' < width) && (i' >= 0) && (j' >= 0)
@@ -28,22 +32,23 @@ dimUtils height width =
     inverse x = Set.diff allPairs x
 
     allNeighbors : Cell -> Set.Set Cell
-    allNeighbors cell = fastAllNeighbors cell -- Set.union (neighbors cell) (diagonals cell)
+    allNeighbors cell = Set.union (neighbors cell) (diagonals cell)
 
-    fastAllNeighbors : Cell -> Set.Set Cell
-    fastAllNeighbors (i, j) = 
-      Set.fromList
-        <| List.filter inBounds
-        <|
+    fastAllNeighbors : Cell -> List Cell
+    fastAllNeighbors cell = case Dict.get cell precalculatedAllNeighbors of Just v -> v
+
+    allNeighborsList : Cell -> List Cell
+    allNeighborsList (i,j) = 
+      List.filter inBounds
           [(-1 + i, j), 
            (1 + i, j),
            (i, j - 1), 
            (i, j + 1),
-           -- diagonals
            (i - 1, j - 1), 
            (i + 1, j - 1), 
            (i - 1, j + 1), 
            (i + 1, j + 1)]
+
 
     neighbors : Cell -> Set.Set Cell
     neighbors (i,j) = 
@@ -90,6 +95,13 @@ dimUtils height width =
                                         Nothing -> connect <| y :: (connect <| x::xs)
                                         Just s -> connect <| s :: xs
 
+    connectWithPerimeter : List (Set.Set Cell, Set.Set Cell) -> List (Set.Set Cell, Set.Set Cell)
+    connectWithPerimeter setList = case setList of
+                        ([x]) -> [x]
+                        (x::y::xs) -> case combineWithPerimeter x y of
+                                        Nothing -> connectWithPerimeter <| y :: (connectWithPerimeter <| x::xs)
+                                        Just s -> connectWithPerimeter <| s :: xs
+
     combine : Set.Set Cell -> Set.Set Cell -> Maybe (Set.Set Cell)
     combine s1 s2 = 
       let 
@@ -99,10 +111,19 @@ dimUtils height width =
           Just x -> Just <| Set.insert x <| Set.union s1 s2
           Nothing -> Nothing
 
+    combineWithPerimeter : (Set.Set Cell, Set.Set Cell) -> (Set.Set Cell, Set.Set Cell) -> Maybe (Set.Set Cell, Set.Set Cell)
+    combineWithPerimeter (s1,p1) (s2,p2) = 
+      let 
+        shared = Set.intersect p1 p2
+      in
+        case List.head <| Set.toList shared of
+          Just x -> Just (Set.insert x <| Set.union s1 s2, Set.union p1 p2)
+          Nothing -> Nothing
+
     evolve : Set.Set Cell -> Set.Set Cell
     evolve board = 
       let
-        numNeighbors cell = List.length <| Set.toList <| Set.intersect (allNeighbors cell) board
+        numNeighbors cell = List.length <| List.filter (\x -> Set.member x board) <| fastAllNeighbors cell
         allPairsNeighbors = Set.map (\cell -> (cell, numNeighbors cell)) allPairs
         boardNeighbors = Set.filter (\(cell, n) -> Set.member cell board && (n < 5 && n >= 1)) allPairsNeighbors
       in 
@@ -111,10 +132,12 @@ dimUtils height width =
                         boardNeighbors
     maze = 
       let
-        start = List.foldl Set.union Set.empty [neighbors (2,2), allNeighbors (5,5), diagonals (6,3)]
+        start = List.foldl Set.union Set.empty [neighbors (2,2), allNeighbors (5,5), diagonals (9,3), neighbors (7,13), allNeighbors (3,13), diagonals (10,1)]
         evolveN n = List.foldl (>>) identity (List.repeat n evolve)
       in
-        inverse <| justHead <| connect <| sets <| evolveN 25 start
+        inverse <| justSetHead <| connectWithPerimeter <| mapPerimeter <| sets <| evolveN 15 start
+    mapPerimeter : List (Set.Set Cell) -> List (Set.Set Cell, Set.Set Cell)
+    mapPerimeter xs = List.map (\x -> (x, perimeter x)) xs
 
   in 
     { inBounds=inBounds, 

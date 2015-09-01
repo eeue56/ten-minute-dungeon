@@ -14,8 +14,8 @@ drawPlayer : Board -> Player -> Form
 drawPlayer board player = 
   let 
     pieceSize = board.pieceSize
-    originX = pieceSize/2-(board.width / 2) 
-    originY = pieceSize/2-(board.height / 2)
+    originX = pieceSize/2 - board.width/2 
+    originY = pieceSize/2 - board.height/2
     x = originX + pieceSize * (toFloat player.pos.x)
     y = originY + pieceSize * (toFloat player.pos.y)
   in
@@ -26,8 +26,8 @@ drawPlayer board player =
 drawPiece board piece = 
   let 
     pieceSize = board.pieceSize
-    originX = pieceSize/2-(board.width / 2) 
-    originY = pieceSize/2-(board.height / 2)
+    originX = pieceSize/2 - board.width/2
+    originY = pieceSize/2 - board.height/2
     x = originX + pieceSize * (toFloat piece.pos.x)
     y = originY + pieceSize * (toFloat piece.pos.y)
   in

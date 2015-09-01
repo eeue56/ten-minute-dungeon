@@ -13,9 +13,9 @@ board =
   let 
     player = makePlayer 5 5
     trailEnd = (player.pos.x, player.pos.y)
-    pieceSize = 50
-    cols = 20
-    rows = 20
+    pieceSize = 30
+    cols = 15
+    rows = 15
     pieces = makeMaze cols rows
     width = cols * pieceSize
     height = rows * pieceSize
